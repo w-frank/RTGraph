@@ -5,6 +5,8 @@ from rtgraph.core.constants import Constants, SourceType
 from rtgraph.ui.popUp import PopUp
 from rtgraph.common.logger import Logger as Log
 
+import pyqtgraph as pg
+
 
 TAG = "MainWindow"
 
@@ -112,6 +114,8 @@ class MainWindow(QtGui.QMainWindow):
         self.ui.plt.setAntialiasing(True)
         self._plt = self.ui.plt.addPlot(row=1, col=1)
         self._plt.setLabel('bottom', Constants.plot_xlabel_title, Constants.plot_xlabel_unit)
+        self._plt.setLabel('left', Constants.plot_ylabel_title, Constants.plot_ylabel_unit)
+        self._plt.setYRange(-1, 6)
 
     def _configure_timers(self):
         """
@@ -154,7 +158,7 @@ class MainWindow(QtGui.QMainWindow):
         for idx in range(self.worker.get_lines()):
             self._plt.plot(x=self.worker.get_time_buffer(),
                            y=self.worker.get_values_buffer(idx),
-                           pen=Constants.plot_colors[idx])
+                           pen=pg.mkPen(Constants.plot_colors[idx], width=2))
 
     def _source_changed(self):
         """

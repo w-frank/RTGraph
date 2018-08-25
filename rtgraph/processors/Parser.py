@@ -94,6 +94,7 @@ class ParserProcess(multiprocessing.Process):
                 else:
                     raise TypeError
                 values = [float(v) for v in values]
+                values = self._adc_counts_to_volts(values)
                 Log.d(TAG, values)
                 self._out_queue.put((time, values))
                 if self._store_reference is not None:
@@ -103,3 +104,6 @@ class ParserProcess(multiprocessing.Process):
             except AttributeError:
                 Log.w(TAG, "Attribute error on type ({}). Raw: {}".format(type(line), line.strip()))
 
+    def _adc_counts_to_volts(self, counts):
+        volts = [(count/(2**10-1))*5 for count in counts]
+        return volts
